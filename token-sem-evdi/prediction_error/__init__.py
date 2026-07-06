@@ -1,4 +1,4 @@
-"""Public API for token-level prediction error estimation."""
+"""Public API for prediction error estimation modules."""
 
 from .token_pe import (
     TokenPEEstimator,

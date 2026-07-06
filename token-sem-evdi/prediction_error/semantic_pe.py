@@ -114,6 +114,17 @@ class SemanticPEEstimator:
         dispersion_weight: float = 0.4,
         original_error_weight: float = 0.0,
     ) -> None:
+        if num_samples < 1:
+            raise ValueError("num_samples must be at least 1")
+        if not 0.0 <= similarity_threshold <= 1.0:
+            raise ValueError("similarity_threshold must be between 0 and 1")
+        if entropy_weight < 0:
+            raise ValueError("entropy_weight must be non-negative")
+        if dispersion_weight < 0:
+            raise ValueError("dispersion_weight must be non-negative")
+        if original_error_weight < 0:
+            raise ValueError("original_error_weight must be non-negative")
+
         self.generator = generator
         self.embedder = embedder
         self.num_samples = num_samples
@@ -150,16 +161,37 @@ class SemanticPEEstimator:
         samples = self._sample_texts(context_text, self.num_samples)
         metadata = self._unit_metadata(unit)
 
-        if not samples:
+        if len(samples) < 2:
+            metadata["insufficient_semantic_samples"] = True
+            original_consistency, original_error = (
+                self._original_metrics(unit.unit_answer, samples)
+                if samples
+                else (None, None)
+            )
+            num_valid_samples = len(samples)
             return UnitSemanticPE(
                 unit_id=unit.unit_id,
                 unit_answer=unit.unit_answer,
                 route=unit.route,
-                samples=[],
-                metrics=self._empty_metrics(),
+                samples=samples,
+                metrics=SemanticPEMetrics(
+                    num_samples=int(self.num_samples),
+                    num_valid_samples=int(num_valid_samples),
+                    mean_pairwise_similarity=None,
+                    semantic_dispersion=None,
+                    num_clusters=int(num_valid_samples),
+                    cluster_distribution=(
+                        [int(num_valid_samples)] if samples else []
+                    ),
+                    cluster_entropy=None,
+                    original_consistency=original_consistency,
+                    original_semantic_error=original_error,
+                    pe_sem=None,
+                ),
                 metadata=metadata,
             )
 
+        metadata["insufficient_semantic_samples"] = False
         sample_embeddings = self._embed_texts(samples)
         if sample_embeddings.shape[0] != len(samples):
             raise ValueError(
@@ -382,20 +414,6 @@ class SemanticPEEstimator:
             return None
         value = sum(weight * metric for weight, metric in weighted_values)
         return float(np.clip(value / weight_sum, 0.0, 1.0))
-
-    def _empty_metrics(self) -> SemanticPEMetrics:
-        return SemanticPEMetrics(
-            num_samples=int(self.num_samples),
-            num_valid_samples=0,
-            mean_pairwise_similarity=None,
-            semantic_dispersion=None,
-            num_clusters=0,
-            cluster_distribution=[],
-            cluster_entropy=None,
-            original_consistency=None,
-            original_semantic_error=None,
-            pe_sem=None,
-        )
 
     def _unit_metadata(self, unit: UnitInput) -> Dict[str, Any]:
         metadata = dict(unit.metadata)
