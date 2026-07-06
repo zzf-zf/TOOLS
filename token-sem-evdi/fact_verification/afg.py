@@ -29,12 +29,15 @@ class AtomicFactGenerator:
         facts = []
         seen = set()
         for line in output.splitlines():
-            text = re.sub(r"^\s*(?:[-*•]|\d+[.)])\s*", "", line).strip()
-            if not text or text.lower().startswith(("atomic facts:", "answer:")):
+            match = re.match(r"^\s*(?:[-*•]\s+|\d+[.)]\s+)(.+?)\s*$", line)
+            if not match:
                 continue
-            if text not in seen:
-                facts.append(AtomicFact(text=text))
-                seen.add(text)
+            text = match.group(1).strip()
+            normalized = re.sub(r"\s+", " ", text).casefold()
+            if not normalized or normalized in seen:
+                continue
+            facts.append(AtomicFact(text=text, fact_id=f"fact-{len(facts) + 1:04d}"))
+            seen.add(normalized)
         return facts
 
     def _generate(self, prompt: str) -> str:

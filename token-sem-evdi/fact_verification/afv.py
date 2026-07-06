@@ -21,7 +21,7 @@ class AtomicFactValidator:
         evidence: List[EvidencePassage],
     ) -> FactValidation:
         if not evidence:
-            return FactValidation(fact=fact, supported=False, evidence=[])
+            return FactValidation(fact=fact, label="NO_EVIDENCE", evidence=[])
 
         context = "\n\n".join(
             f"[{index}] Title: {passage.title or 'Untitled'}\n{passage.text}"
@@ -33,10 +33,10 @@ class AtomicFactValidator:
             f"Context:\n{context}\n\nAtomic fact: {fact.text}\nVerdict:"
         )
         raw_output = self._generate(prompt).strip()
-        supported = self._parse_verdict(raw_output)
+        label = self._parse_label(raw_output)
         return FactValidation(
             fact=fact,
-            supported=supported,
+            label=label,
             evidence=evidence,
             confidence=self._parse_confidence(raw_output),
             raw_output=raw_output,
@@ -61,17 +61,21 @@ class AtomicFactValidator:
         return output
 
     @staticmethod
-    def _parse_verdict(output: str) -> bool:
+    def _parse_label(output: str) -> str:
         normalized = output.upper()
         unsupported = re.search(r"\b(?:UNSUPPORTED|FALSE|NOT SUPPORTED)\b", normalized)
         supported = re.search(r"\b(?:SUPPORTED|TRUE)\b", normalized)
         if unsupported:
-            return False
+            return "UNSUPPORTED"
         if supported:
-            return True
+            return "SUPPORTED"
         raise ValueError(f"AFV returned an unrecognized verdict: {output!r}")
 
     @staticmethod
     def _parse_confidence(output: str) -> Optional[float]:
-        match = re.search(r"(?:confidence\s*[:=]\s*)?(0(?:\.\d+)?|1(?:\.0+)?)", output.lower())
+        match = re.search(
+            r"\bconfidence\s*:\s*(0(?:\.\d+)?|1(?:\.0+)?)\b",
+            output,
+            flags=re.IGNORECASE,
+        )
         return float(match.group(1)) if match else None

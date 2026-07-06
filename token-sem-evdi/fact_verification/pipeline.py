@@ -1,6 +1,8 @@
-"""End-to-end AFG, retrieval, and AFV orchestration."""
+"""End-to-end AFG, retrieval, AFV, and persistence orchestration."""
 
-from typing import Any, Dict, Optional
+import os
+from pathlib import Path
+from typing import Any, Dict, Optional, Union
 
 from .afg import AtomicFactGenerator
 from .afv import AtomicFactValidator
@@ -28,6 +30,7 @@ class FactVerificationPipeline:
         answer: str,
         route: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        question: Optional[str] = None,
     ) -> VerificationReport:
         facts = self.afg.extract(answer)
         evidence = [self.retriever.retrieve(fact, self.top_k) for fact in facts]
@@ -37,4 +40,23 @@ class FactVerificationPipeline:
             validations=validations,
             route=route,
             metadata=metadata or {},
+            question=question,
         )
+
+    def evaluate_and_save(
+        self,
+        answer: str,
+        output_path: Union[str, os.PathLike],
+        route: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        question: Optional[str] = None,
+    ) -> VerificationReport:
+        """Run the complete pipeline and persist all intermediate results."""
+        report = self.evaluate(
+            answer=answer,
+            route=route,
+            metadata=metadata,
+            question=question,
+        )
+        report.save_json(Path(output_path))
+        return report
