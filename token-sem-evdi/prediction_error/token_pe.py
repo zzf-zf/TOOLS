@@ -20,6 +20,7 @@ class UnitInput:
     route: str = "direct"
     evidence: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+    context_text: Optional[str] = None
 
 
 @dataclass
@@ -97,6 +98,7 @@ class TokenPEEstimator:
     ) -> None:
         self.model = model
         self.tokenizer = tokenizer
+        self.requested_device = device
         self.device = torch.device(
             device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
         )
@@ -104,10 +106,26 @@ class TokenPEEstimator:
         self.compute_entropy = compute_entropy
         self.keep_token_details = keep_token_details
 
-        self.model.to(self.device)
+        is_dispatched_or_quantized = (
+            hasattr(self.model, "hf_device_map")
+            or bool(getattr(self.model, "is_loaded_in_4bit", False))
+            or bool(getattr(self.model, "is_loaded_in_8bit", False))
+        )
+        if not is_dispatched_or_quantized and (
+            device is not None or torch.cuda.is_available()
+        ):
+            try:
+                self.model.to(self.device)
+            except (RuntimeError, ValueError, TypeError):
+                pass
         self.model.eval()
 
     def build_context(self, unit: UnitInput) -> str:
+        if unit.context_text is not None:
+            if unit.context_text.endswith((" ", "\n")):
+                return unit.context_text
+            return unit.context_text + " "
+
         sections: List[str] = []
         if unit.question:
             sections.append(f"Question:\n{unit.question}")
@@ -128,7 +146,7 @@ class TokenPEEstimator:
 
         context_text = self.build_context(unit)
         full_text = context_text + answer_text
-        input_ids, attention_mask, answer_indices = self._tokenize(
+        input_ids, attention_mask, answer_indices, tokenization_method = self._tokenize(
             context_text, full_text
         )
 
@@ -138,11 +156,12 @@ class TokenPEEstimator:
             if 0 < index < input_ids.shape[1]
         ]
         if not valid_indices:
-            return self._empty_result(unit)
+            return self._empty_result(unit, tokenization_method)
 
-        input_ids = input_ids.to(self.device)
+        input_device = self._get_input_device()
+        input_ids = input_ids.to(input_device)
         if attention_mask is not None:
-            attention_mask = attention_mask.to(self.device)
+            attention_mask = attention_mask.to(input_device)
 
         with torch.inference_mode():
             outputs = self.model(
@@ -190,6 +209,8 @@ class TokenPEEstimator:
             low_conf_ratio=low_conf_ratio,
             pe_token=float(1.0 - math.exp(-mean_nll)),
         )
+        metadata = dict(unit.metadata)
+        metadata["tokenization_method"] = tokenization_method
         return UnitTokenPE(
             unit_id=unit.unit_id,
             unit_answer=unit.unit_answer,
@@ -202,11 +223,18 @@ class TokenPEEstimator:
                 if self.keep_token_details and self.compute_entropy
                 else None
             ),
-            metadata=unit.metadata,
+            metadata=metadata,
         )
 
-    def evaluate_units(self, units: List[UnitInput]) -> TokenPEReport:
-        return TokenPEReport(units=[self.evaluate_unit(unit) for unit in units])
+    def evaluate_units(
+        self,
+        units: List[UnitInput],
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> TokenPEReport:
+        return TokenPEReport(
+            units=[self.evaluate_unit(unit) for unit in units],
+            metadata=metadata or {},
+        )
 
     def save_report(self, report: TokenPEReport, output_path: str) -> None:
         path = Path(output_path)
@@ -216,7 +244,7 @@ class TokenPEEstimator:
 
     def _tokenize(
         self, context_text: str, full_text: str
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], List[int]]:
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], List[int], str]:
         try:
             encoded = self.tokenizer(
                 full_text,
@@ -234,13 +262,14 @@ class TokenPEEstimator:
                 encoded["input_ids"],
                 encoded.get("attention_mask"),
                 answer_indices,
+                "offset_mapping",
             )
         except (KeyError, NotImplementedError, TypeError, ValueError):
             return self._tokenize_fallback(context_text, full_text)
 
     def _tokenize_fallback(
         self, context_text: str, full_text: str
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], List[int]]:
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], List[int], str]:
         context_ids = self.tokenizer.encode(
             context_text, add_special_tokens=False
         )
@@ -252,10 +281,30 @@ class TokenPEEstimator:
         input_ids = encoded["input_ids"]
         start = min(len(context_ids), input_ids.shape[1])
         answer_indices = list(range(start, input_ids.shape[1]))
-        return input_ids, encoded.get("attention_mask"), answer_indices
+        return (
+            input_ids,
+            encoded.get("attention_mask"),
+            answer_indices,
+            "fallback_prefix_length",
+        )
+
+    def _get_input_device(self) -> torch.device:
+        try:
+            parameter_device = next(self.model.parameters()).device
+        except (AttributeError, StopIteration, TypeError):
+            return self.device
+        if parameter_device.type == "meta":
+            return self.device
+        return parameter_device
 
     @staticmethod
-    def _empty_result(unit: UnitInput) -> UnitTokenPE:
+    def _empty_result(
+        unit: UnitInput,
+        tokenization_method: Optional[str] = None,
+    ) -> UnitTokenPE:
+        metadata = dict(unit.metadata)
+        if tokenization_method is not None:
+            metadata["tokenization_method"] = tokenization_method
         return UnitTokenPE(
             unit_id=unit.unit_id,
             unit_answer=unit.unit_answer,
@@ -268,5 +317,5 @@ class TokenPEEstimator:
                 low_conf_ratio=None,
                 pe_token=None,
             ),
-            metadata=unit.metadata,
+            metadata=metadata,
         )
