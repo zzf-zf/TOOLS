@@ -7,6 +7,12 @@ from .token_pe import (
     UnitInput,
     UnitTokenPE,
 )
+from .semantic_pe import (
+    SemanticPEEstimator,
+    SemanticPEMetrics,
+    SemanticPEReport,
+    UnitSemanticPE,
+)
 
 __all__ = [
     "UnitInput",
@@ -14,4 +20,8 @@ __all__ = [
     "UnitTokenPE",
     "TokenPEReport",
     "TokenPEEstimator",
+    "SemanticPEMetrics",
+    "UnitSemanticPE",
+    "SemanticPEReport",
+    "SemanticPEEstimator",
 ]
