@@ -380,7 +380,7 @@ class SemanticPEEstimator:
         self, unit_answer: str, samples: List[str]
     ) -> tuple[Optional[float], Optional[float]]:
         original = unit_answer.strip()
-        if not original:
+        if not original or not samples:
             return None, None
         embeddings = self._embed_texts([original, *samples])
         if embeddings.shape[0] != len(samples) + 1:
