@@ -13,6 +13,12 @@ from .semantic_pe import (
     SemanticPEReport,
     UnitSemanticPE,
 )
+from .unit_pe_report import (
+    PEAlignmentReport,
+    PEAlignmentSummary,
+    UnitPEAligner,
+    UnitPERecord,
+)
 
 __all__ = [
     "UnitInput",
@@ -24,4 +30,8 @@ __all__ = [
     "UnitSemanticPE",
     "SemanticPEReport",
     "SemanticPEEstimator",
+    "UnitPERecord",
+    "PEAlignmentSummary",
+    "PEAlignmentReport",
+    "UnitPEAligner",
 ]
