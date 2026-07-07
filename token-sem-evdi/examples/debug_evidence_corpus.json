@@ -1,0 +1,44 @@
+[
+  {
+    "title": "北京交通大学所在地",
+    "text": "北京交通大学位于北京市海淀区。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  },
+  {
+    "title": "北京交通大学地点辨析",
+    "text": "北京交通大学位于北京，而不是位于上海市徐汇区。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  },
+  {
+    "title": "Transformer 的自注意力机制",
+    "text": "Transformer 架构使用 self-attention，即自注意力机制，建模序列中不同位置之间的关系。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  },
+  {
+    "title": "Transformer 与循环结构",
+    "text": "Transformer 不依赖循环神经网络作为核心序列建模结构，其核心设计以注意力机制为基础。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  },
+  {
+    "title": "预测加工理论",
+    "text": "预测加工理论关注系统如何形成预测、表征预测误差并据此更新，因此可提供一种认知科学视角。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  },
+  {
+    "title": "大语言模型的理解争议",
+    "text": "大语言模型是否具有真正的理解能力仍是存在争议的开放问题，不同理论立场会给出不同解释。",
+    "metadata": {
+      "source": "debug_manual"
+    }
+  }
+]
