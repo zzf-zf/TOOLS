@@ -343,6 +343,7 @@ class HuggingFaceGeneratorWrapper:
         return cleaned or original
 
     def generate(self, prompt: str) -> str:
+        # Raw deterministic generation for AFG/AFV; keep bullets and numbering.
         encoded, input_length = self._encode(prompt)
         output_ids = self.model.generate(
             **encoded,
@@ -353,7 +354,7 @@ class HuggingFaceGeneratorWrapper:
         decoded = self.tokenizer.decode(
             output_ids[0, input_length:], skip_special_tokens=True
         )
-        return self._postprocess_generated_text(decoded)
+        return decoded.strip()
 
     def sample(
         self,
@@ -363,6 +364,7 @@ class HuggingFaceGeneratorWrapper:
         temperature: float = 0.7,
         top_p: float = 0.9,
     ) -> List[str]:
+        # Constrained and postprocessed stochastic generation for semantic PE.
         constrained_prompt = (
             "请只生成当前步骤的一句话答案。"
             "不要编号，不要解释，不要写代码，不要输出 Answer，不要扩展背景。"
