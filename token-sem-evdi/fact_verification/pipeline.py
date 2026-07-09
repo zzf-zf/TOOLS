@@ -7,7 +7,7 @@ from typing import Any, Dict, Optional, Union
 from .afg import AtomicFactGenerator
 from .afv import AtomicFactValidator
 from .retriever import Retriever
-from .schemas import VerificationReport
+from .schemas import FactValidation, VerificationReport
 
 
 class FactVerificationPipeline:
@@ -33,8 +33,31 @@ class FactVerificationPipeline:
         question: Optional[str] = None,
     ) -> VerificationReport:
         facts = self.afg.extract(answer)
-        evidence = [self.retriever.retrieve(fact, self.top_k) for fact in facts]
-        validations = self.afv.verify_batch(facts, evidence)
+        validations = []
+        verifiable_facts = [fact for fact in facts if fact.verifiable]
+        verifiable_evidence = [
+            self.retriever.retrieve(fact, self.top_k)
+            for fact in verifiable_facts
+        ]
+        verifiable_validations = self.afv.verify_batch(
+            verifiable_facts, verifiable_evidence
+        )
+        validation_by_fact_id = {
+            validation.fact.fact_id: validation
+            for validation in verifiable_validations
+        }
+        for fact in facts:
+            if fact.verifiable:
+                validations.append(validation_by_fact_id[fact.fact_id])
+                continue
+            validations.append(
+                FactValidation(
+                    fact=fact,
+                    label=fact.validity.upper(),
+                    evidence=[],
+                    raw_output=fact.drop_reason or "",
+                )
+            )
         return VerificationReport(
             answer=answer,
             validations=validations,

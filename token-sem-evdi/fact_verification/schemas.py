@@ -19,6 +19,13 @@ class AtomicFact:
     text: str
     source_sentence: Optional[str] = None
     fact_id: Optional[str] = None
+    validity: str = "VERIFIABLE"
+    drop_reason: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def verifiable(self) -> bool:
+        return self.validity.upper() == "VERIFIABLE"
 
 
 @dataclass(frozen=True)
@@ -58,10 +65,11 @@ class VerificationReport:
 
     @property
     def evidence_support_score(self) -> Optional[float]:
-        """Fraction of atomic facts labelled SUPPORTED."""
-        if not self.validations:
+        """Fraction of verifiable atomic facts labelled SUPPORTED."""
+        verifiable_items = self.verifiable_validations
+        if not verifiable_items:
             return None
-        return sum(item.supported for item in self.validations) / len(self.validations)
+        return sum(item.supported for item in verifiable_items) / len(verifiable_items)
 
     @property
     def pe_evid(self) -> Optional[float]:
@@ -71,7 +79,31 @@ class VerificationReport:
 
     @property
     def unsupported_facts(self) -> List[AtomicFact]:
-        return [item.fact for item in self.validations if not item.supported]
+        return [
+            item.fact
+            for item in self.verifiable_validations
+            if not item.supported
+        ]
+
+    @property
+    def verifiable_validations(self) -> List[FactValidation]:
+        return [item for item in self.validations if item.fact.verifiable]
+
+    @property
+    def non_verifiable_facts(self) -> List[AtomicFact]:
+        return [item.fact for item in self.validations if not item.fact.verifiable]
+
+    @property
+    def evidence_status(self) -> str:
+        if not self.validations:
+            return "NO_ATOMIC_FACTS"
+        if not self.verifiable_validations:
+            return "NO_VERIFIABLE_FACTS"
+        if self.evidence_support_score == 1.0:
+            return "FULLY_SUPPORTED"
+        if self.evidence_support_score == 0.0:
+            return "UNSUPPORTED"
+        return "PARTIALLY_SUPPORTED"
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialize the score and every intermediate pipeline result."""
@@ -80,6 +112,9 @@ class VerificationReport:
                 "fact_id": item.fact.fact_id,
                 "text": item.fact.text,
                 "source_sentence": item.fact.source_sentence,
+                "validity": item.fact.validity,
+                "drop_reason": item.fact.drop_reason,
+                "metadata": item.fact.metadata,
             }
             for item in self.validations
         ]
@@ -115,6 +150,16 @@ class VerificationReport:
             "afv_results": afv_results,
             "evidence_support_score": self.evidence_support_score,
             "PE_evid": self.pe_evid,
+            "evidence_status": self.evidence_status,
+            "num_atomic_facts": len(self.validations),
+            "num_verifiable_facts": len(self.verifiable_validations),
+            "num_supported_facts": sum(
+                item.supported for item in self.verifiable_validations
+            ),
+            "num_unsupported_facts": sum(
+                not item.supported for item in self.verifiable_validations
+            ),
+            "num_non_verifiable_facts": len(self.non_verifiable_facts),
             "route": self.route,
             "metadata": self.metadata,
         }

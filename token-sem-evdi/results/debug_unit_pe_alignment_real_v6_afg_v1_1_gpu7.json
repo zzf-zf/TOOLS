@@ -1,0 +1,1078 @@
+{
+  "units": [
+    {
+      "unit_id": "case-001",
+      "route": "direct",
+      "unit_answer": "北京交通大学位于北京市海淀区。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9657839701327968,
+        "metrics": {
+          "n_tokens": 8,
+          "mean_nll": 3.37506103515625,
+          "mean_entropy": 0.8271484375,
+          "mean_confidence": 0.5404052734688776,
+          "low_conf_ratio": 0.25,
+          "pe_token": 0.9657839701327968
+        },
+        "metadata": {
+          "primary_test": "stable_correct",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "事实明确，采样结果应较稳定，证据库应支持。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.7461757399324984,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.634560650168754,
+          "semantic_dispersion": 0.36543934983124604,
+          "num_clusters": 4,
+          "cluster_distribution": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "cluster_entropy": 1.0,
+          "original_consistency": 0.6684365856937042,
+          "original_semantic_error": 0.33156341430629577,
+          "pe_sem": 0.7461757399324984
+        },
+        "metadata": {
+          "primary_test": "stable_correct",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "事实明确，采样结果应较稳定，证据库应支持。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "位置在北京市。 北京市。",
+          "京师大学堂旧址。 答案:",
+          "北京市西城区。 请注意，这里指的是学校所在地的行政区划。 京师大学堂旧址是北京大学的前身。",
+          "京郊地区的昌平区。 北京交通大学位于京郊地区的昌平区。"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 0.0,
+        "evidence_support_score": 1.0,
+        "evidence_status": "FULLY_SUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 1,
+        "num_unsupported_facts": 0,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "stable_correct",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "事实明确，采样结果应较稳定，证据库应支持。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "北京交通大学位于北京市海淀区。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": [
+              {
+                "title": "北京交通大学所在地",
+                "text": "北京交通大学位于北京市海淀区。",
+                "score": 2.252762968495368,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              }
+            ]
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "SUPPORTED",
+            "confidence": null,
+            "raw_output": "SUPPORTED\nThe atomic fact is directly supported by the statement in the context, which explicitly states that \"北京交通大学位于北京市海淀区\" (Beijing Jiaotong University is located in Haidian District, Beijing). Therefore, the atomic fact is supported by the given context."
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "stable_correct",
+        "expected_pattern": {
+          "pe_token": "low_or_medium",
+          "pe_sem": "low",
+          "pe_evid": "low"
+        },
+        "note": "事实明确，采样结果应较稳定，证据库应支持。"
+      }
+    },
+    {
+      "unit_id": "case-002",
+      "route": "direct",
+      "unit_answer": "北京交通大学位于上海市徐汇区。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9821245785539972,
+        "metrics": {
+          "n_tokens": 10,
+          "mean_nll": 4.02432861328125,
+          "mean_entropy": 0.633056640625,
+          "mean_confidence": 0.5720127105963911,
+          "low_conf_ratio": 0.4,
+          "pe_token": 0.9821245785539972
+        },
+        "metadata": {
+          "primary_test": "confident_hallucination",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述肯定，但与证据库冲突或不被支持。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.7406359817153991,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.6484100457115022,
+          "semantic_dispersion": 0.3515899542884978,
+          "num_clusters": 4,
+          "cluster_distribution": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "cluster_entropy": 1.0,
+          "original_consistency": 0.6235473751238051,
+          "original_semantic_error": 0.3764526248761949,
+          "pe_sem": 0.7406359817153991
+        },
+        "metadata": {
+          "primary_test": "confident_hallucination",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述肯定，但与证据库冲突或不被支持。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "朝阳区。 答案: 北京市朝阳区。",
+          "北京交通大学位于京师大学堂旧址。",
+          "京师大学堂旧址。 答案:",
+          "位置在北京交通大学的校园内。 北京市海淀区"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 1.0,
+        "evidence_support_score": 0.0,
+        "evidence_status": "UNSUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 0,
+        "num_unsupported_facts": 1,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "confident_hallucination",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述肯定，但与证据库冲突或不被支持。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "北京交通大学位于上海市徐汇区。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": []
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "NO_EVIDENCE",
+            "confidence": null,
+            "raw_output": ""
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "confident_hallucination",
+        "expected_pattern": {
+          "pe_token": "low_or_medium",
+          "pe_sem": "low",
+          "pe_evid": "high"
+        },
+        "note": "表述肯定，但与证据库冲突或不被支持。"
+      }
+    },
+    {
+      "unit_id": "case-003",
+      "route": "direct",
+      "unit_answer": "北京交通大学应该是位于北京市海淀区。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9945505444987919,
+        "metrics": {
+          "n_tokens": 9,
+          "mean_nll": 5.212239583333333,
+          "mean_entropy": 0.8182508680555556,
+          "mean_confidence": 0.4488391139719978,
+          "low_conf_ratio": 0.5555555555555556,
+          "pe_token": 0.9945505444987919
+        },
+        "metadata": {
+          "primary_test": "hedged_but_correct",
+          "expected_pattern": {
+            "pe_token": "medium_or_high",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "语言上带有不确定表达，但事实内容应被证据支持。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.7445940289625756,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.6385149275935609,
+          "semantic_dispersion": 0.3614850724064391,
+          "num_clusters": 4,
+          "cluster_distribution": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "cluster_entropy": 1.0,
+          "original_consistency": 0.717530673459454,
+          "original_semantic_error": 0.282469326540546,
+          "pe_sem": 0.7445940289625756
+        },
+        "metadata": {
+          "primary_test": "hedged_but_correct",
+          "expected_pattern": {
+            "pe_token": "medium_or_high",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "语言上带有不确定表达，但事实内容应被证据支持。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "北京交通大学位于京师大学堂旧址。",
+          "位置在北京。",
+          "一个地点。",
+          "北京市海淀区。"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 0.0,
+        "evidence_support_score": 1.0,
+        "evidence_status": "FULLY_SUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 1,
+        "num_unsupported_facts": 0,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "hedged_but_correct",
+          "expected_pattern": {
+            "pe_token": "medium_or_high",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "语言上带有不确定表达，但事实内容应被证据支持。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "北京交通大学位于北京市海淀区。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": [
+              {
+                "title": "北京交通大学所在地",
+                "text": "北京交通大学位于北京市海淀区。",
+                "score": 2.252762968495368,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              }
+            ]
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "SUPPORTED",
+            "confidence": null,
+            "raw_output": "SUPPORTED\nThe atomic fact is directly supported by the statement in the context, which explicitly states that \"北京交通大学位于北京市海淀区\" (Beijing Jiaotong University is located in Haidian District, Beijing). Therefore, the atomic fact is supported by the given context."
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "hedged_but_correct",
+        "expected_pattern": {
+          "pe_token": "medium_or_high",
+          "pe_sem": "low",
+          "pe_evid": "low"
+        },
+        "note": "语言上带有不确定表达，但事实内容应被证据支持。"
+      }
+    },
+    {
+      "unit_id": "case-004",
+      "route": "direct",
+      "unit_answer": "这个问题目前没有唯一结论，不同研究路径会给出不同解释。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.985258009738904,
+        "metrics": {
+          "n_tokens": 17,
+          "mean_nll": 4.2170553768382355,
+          "mean_entropy": 1.5946403952205883,
+          "mean_confidence": 0.29020278977558894,
+          "low_conf_ratio": 0.6470588235294118,
+          "pe_token": 0.985258009738904
+        },
+        "metadata": {
+          "primary_test": "semantic_instability",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "high",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "问题具有开放性，多次采样可能产生不同立场或解释方向。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.8053265323584653,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.4866836691038367,
+          "semantic_dispersion": 0.5133163308961632,
+          "num_clusters": 4,
+          "cluster_distribution": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "cluster_entropy": 1.0,
+          "original_consistency": 0.46650844141833675,
+          "original_semantic_error": 0.5334915585816633,
+          "pe_sem": 0.8053265323584653
+        },
+        "metadata": {
+          "primary_test": "semantic_instability",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "high",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "问题具有开放性，多次采样可能产生不同立场或解释方向。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "评估大语言模型的理解能力需要考虑多个因素，如上下文理解、逻辑推理和知识应用等。",
+          "0",
+          "分析问题核心",
+          "分析问题的核心：大语言模型是否具备真正理解文本的能力。"
+        ]
+      },
+      "evidence_pe": {
+        "available": false,
+        "pe_evid": null,
+        "evidence_support_score": null,
+        "evidence_status": "NO_ATOMIC_FACTS",
+        "num_atomic_facts": 0,
+        "num_verifiable_facts": 0,
+        "num_supported_facts": 0,
+        "num_unsupported_facts": 0,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "semantic_instability",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "high",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "问题具有开放性，多次采样可能产生不同立场或解释方向。"
+        },
+        "atomic_facts": [],
+        "retrieved_evidence": [],
+        "afv_results": []
+      },
+      "metadata": {
+        "primary_test": "semantic_instability",
+        "expected_pattern": {
+          "pe_token": "medium",
+          "pe_sem": "high",
+          "pe_evid": "none_or_medium"
+        },
+        "note": "问题具有开放性，多次采样可能产生不同立场或解释方向。"
+      }
+    },
+    {
+      "unit_id": "case-005",
+      "route": "direct",
+      "unit_answer": "预测加工理论可以为理解大语言模型的内部误差表征提供一种认知科学视角。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9584262846443832,
+        "metrics": {
+          "n_tokens": 23,
+          "mean_nll": 3.180287153824516,
+          "mean_entropy": 1.4375252101732336,
+          "mean_confidence": 0.42793241459066456,
+          "low_conf_ratio": 0.4782608695652174,
+          "pe_token": 0.9584262846443832
+        },
+        "metadata": {
+          "primary_test": "weakly_verifiable_explanation",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏解释性陈述，不一定能被简单事实证据直接验证。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.6525088766848404,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.788319753823678,
+          "semantic_dispersion": 0.21168024617632197,
+          "num_clusters": 3,
+          "cluster_distribution": [
+            1,
+            2,
+            1
+          ],
+          "cluster_entropy": 0.946394630357186,
+          "original_consistency": 0.7759922917547273,
+          "original_semantic_error": 0.22400770824527272,
+          "pe_sem": 0.6525088766848404
+        },
+        "metadata": {
+          "primary_test": "weakly_verifiable_explanation",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏解释性陈述，不一定能被简单事实证据直接验证。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "陈述预测加工理论的核心观点。 预测加工理论强调大脑通过持续的预测来处理信息，这为理解大语言模型如何高效地生成和理解文本提供了启示。",
+          "介绍预测加工理论的基本概念。",
+          "一句话总结预测加工理论对研究大语言模型的启发。",
+          "陈述预测加工理论的基本原理。"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 1.0,
+        "evidence_support_score": 0.0,
+        "evidence_status": "UNSUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 0,
+        "num_unsupported_facts": 1,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "weakly_verifiable_explanation",
+          "expected_pattern": {
+            "pe_token": "medium",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏解释性陈述，不一定能被简单事实证据直接验证。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "预测加工理论可以为理解大语言模型的内部误差表征提供一种认知科学视角。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": []
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "NO_EVIDENCE",
+            "confidence": null,
+            "raw_output": ""
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "weakly_verifiable_explanation",
+        "expected_pattern": {
+          "pe_token": "medium",
+          "pe_sem": "medium",
+          "pe_evid": "none_or_medium"
+        },
+        "note": "偏解释性陈述，不一定能被简单事实证据直接验证。"
+      }
+    },
+    {
+      "unit_id": "case-006",
+      "route": "retrieve",
+      "unit_answer": "Transformer 架构的核心机制包括自注意力机制。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.8778065220684271,
+        "metrics": {
+          "n_tokens": 11,
+          "mean_nll": 2.1021496057510376,
+          "mean_entropy": 0.7260233922438188,
+          "mean_confidence": 0.6692394094372337,
+          "low_conf_ratio": 0.2727272727272727,
+          "pe_token": 0.8778065220684271
+        },
+        "metadata": {
+          "primary_test": "retrieval_supported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "证据库应包含 Transformer 与 self-attention 的相关表述。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.5210715318090033,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.9142383571661908,
+          "semantic_dispersion": 0.08576164283380916,
+          "num_clusters": 2,
+          "cluster_distribution": [
+            3,
+            1
+          ],
+          "cluster_entropy": 0.8112781244591328,
+          "original_consistency": 0.8090170774951241,
+          "original_semantic_error": 0.19098292250487592,
+          "pe_sem": 0.5210715318090033
+        },
+        "metadata": {
+          "primary_test": "retrieval_supported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "证据库应包含 Transformer 与 self-attention 的相关表述。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "机制是自注意力机制。",
+          "机制是自注意力机制。",
+          "机制：自注意力机制。 Transformer架构的核心机制是自注意力机制。",
+          "机制是自注意力机制。 自注意力机制。"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 0.0,
+        "evidence_support_score": 1.0,
+        "evidence_status": "FULLY_SUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 1,
+        "num_unsupported_facts": 0,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "retrieval_supported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "low"
+          },
+          "note": "证据库应包含 Transformer 与 self-attention 的相关表述。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "Transformer 架构的核心机制包括自注意力机制。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": [
+              {
+                "title": "Transformer 的自注意力机制",
+                "text": "Transformer 架构使用 self-attention，即自注意力机制，建模序列中不同位置之间的关系。",
+                "score": 3.6945957207744073,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              },
+              {
+                "title": "Transformer 与循环结构",
+                "text": "Transformer 不依赖循环神经网络作为核心序列建模结构，其核心设计以注意力机制为基础。",
+                "score": 3.6945957207744073,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              }
+            ]
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "SUPPORTED",
+            "confidence": null,
+            "raw_output": "SUPPORTED\n\nThe context [1] explicitly states that \"Transformer 架构使用 self-attention，即自注意力机制\" which directly supports the atomic fact that \"Transformer 架构的核心机制包括自注意力机制.\" Therefore, the verdict is SUPPORTED. The context [2] also indirectly supports this by mentioning"
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "retrieval_supported_fact",
+        "expected_pattern": {
+          "pe_token": "low_or_medium",
+          "pe_sem": "low",
+          "pe_evid": "low"
+        },
+        "note": "证据库应包含 Transformer 与 self-attention 的相关表述。"
+      }
+    },
+    {
+      "unit_id": "case-007",
+      "route": "retrieve",
+      "unit_answer": "Transformer 架构的核心机制是循环神经网络结构。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9483926108842333,
+        "metrics": {
+          "n_tokens": 12,
+          "mean_nll": 2.964090416828791,
+          "mean_entropy": 0.8575653831164042,
+          "mean_confidence": 0.623325796953092,
+          "low_conf_ratio": 0.25,
+          "pe_token": 0.9483926108842333
+        },
+        "metadata": {
+          "primary_test": "retrieval_contradicted_or_unsupported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述可能稳定，但证据不应支持。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.03763673076989793,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.9059081730752552,
+          "semantic_dispersion": 0.09409182692474483,
+          "num_clusters": 1,
+          "cluster_distribution": [
+            4
+          ],
+          "cluster_entropy": 0.0,
+          "original_consistency": 0.617726965793226,
+          "original_semantic_error": 0.38227303420677405,
+          "pe_sem": 0.03763673076989793
+        },
+        "metadata": {
+          "primary_test": "retrieval_contradicted_or_unsupported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述可能稳定，但证据不应支持。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "机制是自注意力机制。",
+          "机制是自注意力机制。 Transformer 架构的核心机制是自注意力机制。",
+          "机制是自注意力机制。",
+          "自注意力机制。"
+        ]
+      },
+      "evidence_pe": {
+        "available": true,
+        "pe_evid": 1.0,
+        "evidence_support_score": 0.0,
+        "evidence_status": "UNSUPPORTED",
+        "num_atomic_facts": 1,
+        "num_verifiable_facts": 1,
+        "num_supported_facts": 0,
+        "num_unsupported_facts": 1,
+        "num_non_verifiable_facts": 0,
+        "metadata": {
+          "primary_test": "retrieval_contradicted_or_unsupported_fact",
+          "expected_pattern": {
+            "pe_token": "low_or_medium",
+            "pe_sem": "low",
+            "pe_evid": "high"
+          },
+          "note": "表述可能稳定，但证据不应支持。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "Transformer 架构的核心机制是循环神经网络结构。",
+            "source_sentence": null,
+            "validity": "VERIFIABLE",
+            "drop_reason": null,
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": [
+              {
+                "title": "Transformer 的自注意力机制",
+                "text": "Transformer 架构使用 self-attention，即自注意力机制，建模序列中不同位置之间的关系。",
+                "score": 3.6945957207744073,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              },
+              {
+                "title": "Transformer 与循环结构",
+                "text": "Transformer 不依赖循环神经网络作为核心序列建模结构，其核心设计以注意力机制为基础。",
+                "score": 3.6945957207744073,
+                "metadata": {
+                  "source": "debug_manual"
+                }
+              }
+            ]
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "UNSUPPORTED",
+            "confidence": null,
+            "raw_output": "UNSUPPORTED\n\nThe atomic fact states that the core mechanism of the Transformer architecture is a recurrent neural network structure, which contradicts the information provided in the context. The context clearly states that the core design of the Transformer is based on the attention mechanism, not a recurrent neural network. Therefore, the atomic fact is unsupported by"
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "retrieval_contradicted_or_unsupported_fact",
+        "expected_pattern": {
+          "pe_token": "low_or_medium",
+          "pe_sem": "low",
+          "pe_evid": "high"
+        },
+        "note": "表述可能稳定，但证据不应支持。"
+      }
+    },
+    {
+      "unit_id": "case-008",
+      "route": "direct",
+      "unit_answer": "跨学科视角能够帮助研究者从多个层面理解人工智能系统。",
+      "token_pe": {
+        "available": true,
+        "pe_token": 0.9715631887055464,
+        "metrics": {
+          "n_tokens": 15,
+          "mean_nll": 3.56007080078125,
+          "mean_entropy": 1.21357421875,
+          "mean_confidence": 0.3075840033746014,
+          "low_conf_ratio": 0.5333333333333333,
+          "pe_token": 0.9715631887055464
+        },
+        "metadata": {
+          "primary_test": "non_atomic_or_abstract_claim",
+          "expected_pattern": {
+            "pe_token": "any",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏抽象观点，AFG 可能抽取很少事实，PE_evid 可能不可用或中等。",
+          "tokenization_method": "offset_mapping"
+        }
+      },
+      "semantic_pe": {
+        "available": true,
+        "pe_sem": 0.6922325920124204,
+        "metrics": {
+          "num_samples": 4,
+          "num_valid_samples": 4,
+          "mean_pairwise_similarity": 0.6890104655047281,
+          "semantic_dispersion": 0.3109895344952719,
+          "num_clusters": 3,
+          "cluster_distribution": [
+            1,
+            1,
+            2
+          ],
+          "cluster_entropy": 0.946394630357186,
+          "original_consistency": 0.7648433615031851,
+          "original_semantic_error": 0.2351566384968149,
+          "pe_sem": 0.6922325920124204
+        },
+        "metadata": {
+          "primary_test": "non_atomic_or_abstract_claim",
+          "expected_pattern": {
+            "pe_token": "any",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏抽象观点，AFG 可能抽取很少事实，PE_evid 可能不可用或中等。",
+          "requested_num_samples": 4,
+          "max_new_tokens": 64,
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "similarity_threshold": 0.85,
+          "entropy_weight": 0.6,
+          "dispersion_weight": 0.4,
+          "original_error_weight": 0.0,
+          "insufficient_semantic_samples": false
+        },
+        "samples": [
+          "从计算机科学、心理学、哲学等多个领域汲取灵感和方法。",
+          "从计算机科学、心理学、哲学等多个角度综合考虑问题。",
+          "人工智能研究中的跨学科视角能够促进不同领域的知识和技术相互融合，从而推动人工智能技术的发展和应用。",
+          "人工智能研究中的跨学科视角可以促进创新和解决复杂问题。"
+        ]
+      },
+      "evidence_pe": {
+        "available": false,
+        "pe_evid": null,
+        "evidence_support_score": null,
+        "evidence_status": "NO_VERIFIABLE_FACTS",
+        "num_atomic_facts": 2,
+        "num_verifiable_facts": 0,
+        "num_supported_facts": 0,
+        "num_unsupported_facts": 0,
+        "num_non_verifiable_facts": 2,
+        "metadata": {
+          "primary_test": "non_atomic_or_abstract_claim",
+          "expected_pattern": {
+            "pe_token": "any",
+            "pe_sem": "medium",
+            "pe_evid": "none_or_medium"
+          },
+          "note": "偏抽象观点，AFG 可能抽取很少事实，PE_evid 可能不可用或中等。"
+        },
+        "atomic_facts": [
+          {
+            "fact_id": "fact-0001",
+            "text": "跨学科视角能够帮助研究者理解人工智能系统。",
+            "source_sentence": null,
+            "validity": "NOT_VERIFIABLE",
+            "drop_reason": "not_verifiable_or_opinion",
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          },
+          {
+            "fact_id": "fact-0002",
+            "text": "跨学科视角能够帮助研究者从多个层面理解人工智能系统。",
+            "source_sentence": null,
+            "validity": "NOT_VERIFIABLE",
+            "drop_reason": "not_verifiable_or_opinion",
+            "metadata": {
+              "afn_version": "v1.1"
+            }
+          }
+        ],
+        "retrieved_evidence": [
+          {
+            "fact_id": "fact-0001",
+            "passages": []
+          },
+          {
+            "fact_id": "fact-0002",
+            "passages": []
+          }
+        ],
+        "afv_results": [
+          {
+            "fact_id": "fact-0001",
+            "label": "NOT_VERIFIABLE",
+            "confidence": null,
+            "raw_output": "not_verifiable_or_opinion"
+          },
+          {
+            "fact_id": "fact-0002",
+            "label": "NOT_VERIFIABLE",
+            "confidence": null,
+            "raw_output": "not_verifiable_or_opinion"
+          }
+        ]
+      },
+      "metadata": {
+        "primary_test": "non_atomic_or_abstract_claim",
+        "expected_pattern": {
+          "pe_token": "any",
+          "pe_sem": "medium",
+          "pe_evid": "none_or_medium"
+        },
+        "note": "偏抽象观点，AFG 可能抽取很少事实，PE_evid 可能不可用或中等。"
+      }
+    }
+  ],
+  "summary": {
+    "num_units": 8,
+    "num_token_available": 8,
+    "num_semantic_available": 8,
+    "num_evidence_available": 6,
+    "mean_pe_token": 0.9604882136533849,
+    "mean_pe_sem": 0.6175227517806375,
+    "mean_pe_evid": 0.5
+  },
+  "metadata": {
+    "mode": "real",
+    "units_path": "/data2/zhangfeng/Drpaper/TOOLS/token-sem-evdi/examples/debug_units.jsonl",
+    "evidence_corpus_path": "/data2/zhangfeng/Drpaper/TOOLS/token-sem-evdi/examples/debug_evidence_corpus.json",
+    "model_path": "/data2/zhangfeng/Drpaper/model/qwen2.5-7b-instruct",
+    "embedder_path": "/data2/zhangfeng/Drpaper/model/bge-small-zh-v1.5"
+  }
+}

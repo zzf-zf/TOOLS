@@ -258,8 +258,12 @@ class UnitPEAligner:
             "available": False,
             "pe_evid": None,
             "evidence_support_score": None,
+            "evidence_status": "UNAVAILABLE",
             "num_atomic_facts": 0,
+            "num_verifiable_facts": 0,
             "num_supported_facts": 0,
+            "num_unsupported_facts": 0,
+            "num_non_verifiable_facts": 0,
             "metadata": {},
         }
         if self.include_evidence_details:
@@ -295,11 +299,46 @@ class UnitPEAligner:
 
             atomic_facts = report_dict.get("atomic_facts", [])
             afv_results = report_dict.get("afv_results", [])
-            num_atomic_facts = len(atomic_facts)
-            num_supported_facts = sum(
-                str(item.get("label", "")).upper() == "SUPPORTED"
-                for item in afv_results
-                if isinstance(item, dict)
+            num_atomic_facts = int(
+                report_dict.get("num_atomic_facts", len(atomic_facts))
+            )
+            num_verifiable_facts = int(
+                report_dict.get(
+                    "num_verifiable_facts",
+                    sum(
+                        str(item.get("validity", "VERIFIABLE")).upper()
+                        == "VERIFIABLE"
+                        for item in atomic_facts
+                        if isinstance(item, dict)
+                    ),
+                )
+            )
+            num_supported_facts = int(
+                report_dict.get(
+                    "num_supported_facts",
+                    sum(
+                        str(item.get("label", "")).upper() == "SUPPORTED"
+                        for item in afv_results
+                        if isinstance(item, dict)
+                    ),
+                )
+            )
+            num_unsupported_facts = int(
+                report_dict.get(
+                    "num_unsupported_facts",
+                    sum(
+                        str(item.get("label", "")).upper()
+                        in {"UNSUPPORTED", "NO_EVIDENCE"}
+                        for item in afv_results
+                        if isinstance(item, dict)
+                    ),
+                )
+            )
+            num_non_verifiable_facts = int(
+                report_dict.get(
+                    "num_non_verifiable_facts",
+                    max(num_atomic_facts - num_verifiable_facts, 0),
+                )
             )
 
             if "afv_results" not in report_dict:
@@ -309,13 +348,32 @@ class UnitPEAligner:
                     bool(getattr(item, "supported", False))
                     for item in validations
                 )
+                num_verifiable_facts = sum(
+                    bool(getattr(getattr(item, "fact", None), "verifiable", True))
+                    for item in validations
+                )
+                num_unsupported_facts = sum(
+                    not bool(getattr(item, "supported", False))
+                    for item in validations
+                    if bool(getattr(getattr(item, "fact", None), "verifiable", True))
+                )
+                num_non_verifiable_facts = max(
+                    num_atomic_facts - num_verifiable_facts, 0
+                )
 
             evidence_pe: Dict[str, Any] = {
                 "available": pe_evid is not None,
                 "pe_evid": pe_evid,
                 "evidence_support_score": evidence_support_score,
+                "evidence_status": report_dict.get(
+                    "evidence_status",
+                    getattr(report, "evidence_status", None),
+                ),
                 "num_atomic_facts": int(num_atomic_facts),
+                "num_verifiable_facts": int(num_verifiable_facts),
                 "num_supported_facts": int(num_supported_facts),
+                "num_unsupported_facts": int(num_unsupported_facts),
+                "num_non_verifiable_facts": int(num_non_verifiable_facts),
                 "metadata": report_dict.get(
                     "metadata", getattr(report, "metadata", {})
                 ),
